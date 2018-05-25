@@ -6,7 +6,7 @@ Create a folder ```data``` in the root directory of this project. Inside this fo
 
 Eg: -
 
-```data
+``` data
         tree
             .wav files of tree being uttered
         moon
