@@ -18,5 +18,5 @@ Eg: -
 
 To run the code,
 
-    ``` python speech_classification.py ```
+    python speech_classification.py
 
