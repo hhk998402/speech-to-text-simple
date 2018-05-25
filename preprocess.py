@@ -13,13 +13,20 @@ DATA_PATH = "./data/"
 def get_labels(path=DATA_PATH):
     labels = os.listdir(path)
     label_indices = np.arange(0, len(labels))
-    labels = labels[:len(labels)-1]
+    labelList = []
+    for i in labels:
+        if(i=='.DS_Store'):
+            continue
+        else:
+            labelList.append(i)
+    labels = labelList
     print(labels)
     return labels, label_indices, to_categorical(label_indices)
 
 
 '''Handy function to convert wav2mfcc'''
 def wav2mfcc(file_path, max_len=11):
+    print(file_path)
     wave, sr = librosa.load(file_path, mono=True, sr=None)
     wave = wave[::3]
     mfcc = librosa.feature.mfcc(wave, sr=16000)
@@ -28,9 +35,8 @@ def wav2mfcc(file_path, max_len=11):
     if (max_len > mfcc.shape[1]):
         pad_width = max_len - mfcc.shape[1]
         mfcc = np.pad(mfcc, pad_width=((0, 0), (0, pad_width)), mode='constant')
-
-    '''Else cutoff the remaining parts'''
     else:
+        '''Else cutoff the remaining parts'''
         mfcc = mfcc[:, :max_len]
 
     return mfcc

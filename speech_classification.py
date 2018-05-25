@@ -3,6 +3,8 @@ import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 from keras.utils import to_categorical
+from keras.models import load_model
+from keras.models import model_from_json
 
 '''Second dimension of the feature is dim2'''
 feature_dim_2 = 11
@@ -16,10 +18,10 @@ X_train, X_test, y_train, y_test = get_train_test()
 '''Feature dimension'''
 feature_dim_1 = 20
 channel = 1
-epochs = 50
+epochs = 500
 batch_size = 100
 verbose = 1
-num_classes = 3
+num_classes = 15
 
 '''Reshaping to perform 2D convolution'''
 X_train = X_train.reshape(X_train.shape[0], feature_dim_1, feature_dim_2, channel)
@@ -50,12 +52,17 @@ def get_model():
 def predict(filepath, model):
     sample = wav2mfcc(filepath)
     sample_reshaped = sample.reshape(1, feature_dim_1, feature_dim_2, channel)
+    print(model.predict(sample_reshaped))
     return get_labels()[0][
             np.argmax(model.predict(sample_reshaped))
     ]
 
 model = get_model()
+model.save('speech_model.h5')
+# del model
+
+# model = load_model('speech_model.h5')
 model.fit(X_train, y_train_hot, batch_size=batch_size, epochs=epochs, verbose=verbose, validation_data=(X_test, y_test_hot))
 
-print(predict('./krishit_bed_01.wav', model=model))
+print(predict('./krishit_cat_01.wav', model=model))
 
